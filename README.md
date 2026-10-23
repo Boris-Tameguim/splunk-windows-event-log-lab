@@ -163,6 +163,45 @@ This type of event can be useful for investigating failed authentication attempt
 
 ---
 
+## 7. Build a Small SOC Monitoring View
+
+To summarize the authentication activity in a more visual way, three Splunk searches were used to create a compact monitoring view:
+
+### Failed Logons Over Time
+
+```spl
+index=* sourcetype="WinEventLog:Security" EventCode=4625
+| timechart count
+```
+
+This helps identify spikes or unusual patterns in failed authentication attempts.
+
+### Top Source IPs for Failed Logons
+
+```spl
+index=* sourcetype="WinEventLog:Security" EventCode=4625
+| stats count by Source_Network_Address
+| sort - count
+```
+
+This helps identify which source addresses are generating the most failed logon activity.
+
+### Recent Account Creations
+
+```spl
+index=* sourcetype="WinEventLog:Security" EventCode=4720
+| table _time Account_Name Subject_Account_Name
+| sort - _time
+```
+
+This provides visibility into recent local account creation events.
+
+![SOC Monitoring Summary](screenshots/07-splunk-soc-dashboard-summary.png)
+
+This final view demonstrates how individual searches can be combined into a simple SOC monitoring summary for faster triage and review.
+
+---
+
 ## Key Takeaways
 
 This lab reinforced the basic SIEM workflow:
@@ -173,6 +212,7 @@ This lab reinforced the basic SIEM workflow:
 - Confirm successful log ingestion
 - Search Windows Security events
 - Analyze successful and failed authentication activity
+- Build a simple SOC monitoring view using Splunk searches
 
 The main lesson was not memorizing every Windows Event ID, but understanding how to search, interpret, and investigate events inside a SIEM.
 
@@ -189,6 +229,7 @@ The main lesson was not memorizing every Windows Event ID, but understanding how
 - PowerShell
 - Authentication event analysis
 - Basic SOC investigation
+- Splunk dashboard and visualization fundamentals
 
 ---
 
