@@ -192,6 +192,3 @@ The main lesson was not memorizing every Windows Event ID, but understanding how
 
 ---
 
-## Status
-
-✅ **Completed**
